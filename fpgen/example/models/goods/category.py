@@ -1,5 +1,5 @@
 from sqlalchemy.sql.schema import Column
-from sqlalchemy import String, Text
+from sqlalchemy import String, Text, Integer
 from fpgen.example.models.base import BaseIDModel
 
 
@@ -8,3 +8,4 @@ class Category(BaseIDModel):
 
     name = Column(String)
     description = Column(Text)
+    numeric_code = Column(Integer)

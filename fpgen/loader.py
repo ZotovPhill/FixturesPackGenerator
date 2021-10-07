@@ -70,7 +70,7 @@ class Loader:
                 if catalog := attrs.get("catalog"):
                     obj.catalog = catalog
             if self.environment in obj.env_group():
-                obj.load()
+                obj.auto_load() if attrs.get("autoload") else obj.load()
                 self.successful_load += 1
                 click.echo(
                     click.style(

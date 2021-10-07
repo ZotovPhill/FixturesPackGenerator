@@ -8,7 +8,16 @@ from sqlalchemy.orm import Session
 from fpgen.example.base import Base
 
 
-class Database:
+class Singleton(type):
+    _instances = {}
+
+    def __call__(cls, *args, **kwargs):
+        if cls not in cls._instances:
+            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
+        return cls._instances[cls]
+
+
+class Database(metaclass=Singleton):
     def __init__(self, db_url: str) -> None:
         self._engine = create_engine(db_url, echo=True)
         self._session_factory = orm.scoped_session(
