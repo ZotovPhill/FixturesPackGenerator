@@ -1,8 +1,8 @@
-from abstract_fixture_loader import AbstractFixtureLoader
 from fpgen.example.models.goods import Unit
+from fpgen.orm.sqlalchemy.sqla_fixtures_loader import SQLAlchemyFixturesLoader
 
 
-class LoadUnit(AbstractFixtureLoader):
+class LoadUnit(SQLAlchemyFixturesLoader):
     __model__ = Unit
 
     @staticmethod

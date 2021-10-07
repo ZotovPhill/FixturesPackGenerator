@@ -5,7 +5,7 @@ from typing import Callable
 import click
 import yaml
 
-from abstract_fixture_loader import AbstractFixtureLoader
+from fpgen.orm.abstract_fixtures_loader import AbstractFixturesLoader
 
 
 class Loader:
@@ -61,7 +61,7 @@ class Loader:
             )
         )
 
-    def _fill_db(self, fixture: Callable[..., AbstractFixtureLoader], attrs: dict) -> None:
+    def _fill_db(self, fixture: Callable[..., AbstractFixturesLoader], attrs: dict) -> None:
         try:
             obj = fixture()
             if attrs:

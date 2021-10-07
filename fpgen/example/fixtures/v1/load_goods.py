@@ -1,12 +1,11 @@
 import random
 
 from fpgen.example.models.goods import Product, Unit, Category
-from fpgen.abstract_fixture_loader import AbstractFixtureLoader
+from fpgen.orm.sqlalchemy.database import db
+from fpgen.orm.sqlalchemy.sqla_fixtures_loader import SQLAlchemyFixturesLoader
 
-from fpgen.example.database import db
 
-
-class LoadGoods(AbstractFixtureLoader):
+class LoadGoods(SQLAlchemyFixturesLoader):
     def load(self) -> None:
         with db.session_scope() as session:
             units = session.query(Unit).all()
