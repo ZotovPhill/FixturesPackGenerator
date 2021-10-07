@@ -1,38 +1,11 @@
 import datetime
 import json
-import faker
 
-from fpgen.example.database import db
-
-
-class Meta(type):
-    def __new__(cls, name, bases, attrs):
-        newattrs = {}
-        for attrname, attrvalue in attrs.items():
-            if attrname in ["__quantity__", "__catalog__", "__model__"]:
-                newattrs[attrname.removesuffix("__").removeprefix("__")] = attrvalue
-            else:
-                newattrs[attrname] = attrvalue
-
-        return super().__new__(cls, name, bases, newattrs)
+from fpgen.orm.sqlalchemy.database import db
+from fpgen.orm.abstract_fixtures_loader import AbstractFixturesLoader
 
 
-class AbstractFixtureLoader(metaclass=Meta):
-    """
-    Values from .yaml config file has priority over default attributes.
-    Leave "attributes:" empty to use dunder attributes.
-
-    __catalog__ = "fpgen/example/fixtures/catalog/v1/unit_list.json"
-    __quantity__ = 20
-    """
-
-    quantity = None
-    catalog = None
-    model = None
-
-    def __init__(self):
-        self.fake = faker.Faker()
-
+class SQLAlchemyFixturesLoader(AbstractFixturesLoader):
     def load(self) -> None:
         pass
 
@@ -61,9 +34,8 @@ class AbstractFixtureLoader(metaclass=Meta):
                     setattr(entity_obj, column_name, value)
                 objects.append(entity_obj)
 
+        self.save(objects)
+
+    def save(self, objects: list):
         with db.session_scope() as session:
             session.bulk_save_objects(objects)
-
-    @staticmethod
-    def env_group() -> list:
-        return []

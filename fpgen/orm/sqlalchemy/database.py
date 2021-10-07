@@ -3,9 +3,10 @@ import os
 from collections import Callable
 from contextlib import contextmanager, AbstractContextManager
 
-from sqlalchemy import create_engine, orm
-from sqlalchemy.orm import Session
-from fpgen.example.base import Base
+from sqlalchemy import create_engine
+from sqlalchemy.orm import Session, scoped_session, sessionmaker
+
+from fpgen.orm.sqlalchemy.base import Base
 
 
 class Singleton(type):
@@ -20,8 +21,8 @@ class Singleton(type):
 class Database(metaclass=Singleton):
     def __init__(self, db_url: str) -> None:
         self._engine = create_engine(db_url, echo=True)
-        self._session_factory = orm.scoped_session(
-            orm.sessionmaker(
+        self._session_factory = scoped_session(
+            sessionmaker(
                 autocommit=False,
                 autoflush=False,
                 bind=self._engine,
@@ -40,7 +41,6 @@ class Database(metaclass=Singleton):
         Base.metadata.drop_all(self._engine)
 
     def create_database(self) -> None:
-        from fpgen.example.models.goods import Unit, Category, Product
         Base.metadata.create_all(self._engine)
 
     @contextmanager

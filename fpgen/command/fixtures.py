@@ -1,7 +1,7 @@
 import click
 import yaml
 
-from fpgen.loader import Loader
+from fpgen.handler.fixtures.loader import Loader
 
 
 @click.command(options_metavar="<options>")

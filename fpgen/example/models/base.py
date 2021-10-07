@@ -5,7 +5,7 @@ from sqlalchemy import (
 )
 from sqlalchemy.sql import func
 
-from fpgen.example.base import Base
+from fpgen.orm.sqlalchemy.base import Base
 
 
 class BaseModel:
