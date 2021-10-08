@@ -1,5 +1,3 @@
-from abc import abstractmethod
-
 import faker
 
 
@@ -31,17 +29,14 @@ class AbstractFixturesLoader(metaclass=Meta):
     def __init__(self):
         self.fake = faker.Faker()
 
-    @abstractmethod
     def load(self) -> None:
-        pass
+        raise NotImplementedError()
 
-    @abstractmethod
     def auto_load(self):
-        pass
+        raise NotImplementedError()
 
-    @abstractmethod
     def save(self, objects: list):
-        pass
+        raise NotImplementedError()
 
     @staticmethod
     def env_group() -> list:
