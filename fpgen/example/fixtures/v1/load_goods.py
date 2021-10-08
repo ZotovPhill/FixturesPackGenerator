@@ -1,13 +1,12 @@
 import random
 
 from fpgen.example.models.goods import Product, Unit, Category
-from fpgen.orm.sqlalchemy.database import db
 from fpgen.orm.sqlalchemy.sqla_fixtures_loader import SQLAlchemyFixturesLoader
 
 
 class LoadGoods(SQLAlchemyFixturesLoader):
     def load(self) -> None:
-        with db.session_scope() as session:
+        with self.db.session_scope() as session:
             units = session.query(Unit).all()
             categories = session.query(Category).all()
             units_count = len(units)

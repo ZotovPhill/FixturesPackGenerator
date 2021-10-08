@@ -2,25 +2,18 @@ import contextlib
 import os
 from collections import Callable
 from contextlib import contextmanager, AbstractContextManager
+from typing import Optional
 
 from sqlalchemy import create_engine
 from sqlalchemy.orm import Session, scoped_session, sessionmaker
 
+from fpgen.orm.abstract_database import Database
 from fpgen.orm.sqlalchemy.base import Base
 
 
-class Singleton(type):
-    _instances = {}
-
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
-
-class Database(metaclass=Singleton):
-    def __init__(self, db_url: str) -> None:
-        self._engine = create_engine(db_url, echo=True)
+class SQLAlchemyDatabase(Database):
+    def __init__(self, db_url: Optional[str]) -> None:
+        self._engine = create_engine(db_url or os.environ['DATABASE_URL'], echo=True)
         self._session_factory = scoped_session(
             sessionmaker(
                 autocommit=False,
@@ -28,7 +21,6 @@ class Database(metaclass=Singleton):
                 bind=self._engine,
             ),
         )
-        self.create_database()
 
     def truncate_database(self) -> None:
         with contextlib.closing(self._engine.connect()) as con:
@@ -54,6 +46,3 @@ class Database(metaclass=Singleton):
             raise
         finally:
             session.close()
-
-
-db = Database(os.environ['DATABASE_URL'])

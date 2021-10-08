@@ -6,7 +6,7 @@ fixtures:
       class: LoadUnit
       attributes:
         quantity: 20
-        catalog: "/home/INTEXSOFT/filipp.zotov/PycharmProjects/FixturesPackGenerator/fpgen/example/fixtures/catalog/v1/unit_list.json"
+        catalog: "/fpgen/example/fixtures/catalog/v1/unit_list.json"
         autoload: True
     Category:
       module: load_category
